@@ -76,7 +76,6 @@ class MusicBot(discord.Client):
 
         self.config = Config(config_file)
         self.permissions = Permissions(perms_file, grant_all=[self.config.owner_id])
-        self.permissions = Permissions(perms_file, grant_all=["180094452860321793"])
 
         self.blacklist = set(load_file(self.config.blacklist_file))
         self.autoplaylist = load_file(self.config.auto_playlist_file)
@@ -101,7 +100,7 @@ class MusicBot(discord.Client):
             # Only allow the owner to use these commands
             orig_msg = self._get_variable('message')
 
-            if not orig_msg or orig_msg.author.id == self.config.owner_id or orig_msg.author.id == "180094452860321793":
+            if not orig_msg or orig_msg.author.id == self.config.owner_id:
                 return await func(self, *args, **kwargs)
             else:
                 raise exceptions.PermissionsError("only the owner can use this command", expire_in=25)
