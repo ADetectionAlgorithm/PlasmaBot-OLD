@@ -1,5 +1,2 @@
 https://github.com/Rapptz/discord.py/archive/async.zip
 youtube_dl >= 2016.4.24
-numpy >= 1.8
-joblib >= 0.8
-TheBlueAlliance
