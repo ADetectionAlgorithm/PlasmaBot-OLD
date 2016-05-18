@@ -21,11 +21,11 @@ from datetime import timedelta
 from random import choice, shuffle
 from collections import defaultdict
 
-from musicbot.playlist import Playlist
-from musicbot.player import MusicPlayer
-from musicbot.config import Config, ConfigDefaults
-from musicbot.permissions import Permissions, PermissionsDefaults
-from musicbot.utils import load_file, write_file, sane_round_int
+from plasmaBot.playlist import Playlist
+from plasmaBot.player import MusicPlayer
+from plasmaBot.config import Config, ConfigDefaults
+from plasmaBot.permissions import Permissions, PermissionsDefaults
+from plasmaBot.utils import load_file, write_file, sane_round_int
 
 from . import exceptions
 from . import downloader
@@ -63,7 +63,7 @@ class Response:
         self.delete_after = delete_after
 
 
-class MusicBot(discord.Client):
+class PlasmaBot(discord.Client):
     def __init__(self, config_file=ConfigDefaults.options_file, perms_file=PermissionsDefaults.perms_file):
         super().__init__()
 
@@ -87,7 +87,7 @@ class MusicBot(discord.Client):
             print("Warning: Autoplaylist is empty, disabling.")
             self.config.auto_playlist = False
 
-        self.headers['user-agent'] += ' MusicBot/%s' % BOTVERSION
+        self.headers['user-agent'] += ' plasmaBot/%s' % BOTVERSION
 
         # TODO: Do these properly
         ssd_defaults = {'last_np_msg': None, 'auto_paused': False}
@@ -595,7 +595,7 @@ class MusicBot(discord.Client):
             super().on_error(event, *args, **kwargs)
 
     async def on_ready(self):
-        print('\rConnected!  Musicbot v%s\n' % BOTVERSION)
+        print('\rConnected!  PlasmaBot v%s\n' % BOTVERSION)
 
         if self.config.owner_id == self.user.id:
             raise exceptions.HelpfulError(
@@ -1971,5 +1971,5 @@ class MusicBot(discord.Client):
 
 
 if __name__ == '__main__':
-    bot = MusicBot()
+    bot = PlasmaBot()
     bot.run()
