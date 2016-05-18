@@ -680,14 +680,6 @@ class PlasmaBot(discord.Client):
         print()
         # t-t-th-th-that's all folks!
     
-    aysnc def cmd_tst2403(self, author):
-        """
-           >tst2403
-           
-        A Test Message to reverse engineer command programming.
-        """
-        return Response("PlasmaGuy has Injected Code", delete_After=15)
-    
     async def cmd_help(self, command=None):
         """
         Usage:
