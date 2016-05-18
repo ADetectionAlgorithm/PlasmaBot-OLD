@@ -45,7 +45,7 @@ class Config:
         config = configparser.ConfigParser(interpolation=None)
         config.read(config_file, encoding='utf-8')
 
-        confsections = {"Credentials", "Permissions", "Chat", "PlasmaBot"}.difference(config.sections())
+        confsections = {"Credentials", "BotInfo", "Permissions", "Chat", "PlasmaBot"}.difference(config.sections())
         if confsections:
             raise HelpfulError(
                 "One or more required config sections are missing.",
@@ -61,7 +61,9 @@ class Config:
         self._login_token = config.get('Credentials', 'Token', fallback=ConfigDefaults.token)
 
         self.auth = None
-
+        
+        self.clientID = config.get('BotInfo', 'ClientID', fallback=ConfigDefaults.joinLink)
+        
         self.owner_id = config.get('Permissions', 'OwnerID', fallback=ConfigDefaults.owner_id)
         self.command_prefix = config.get('Chat', 'CommandPrefix', fallback=ConfigDefaults.command_prefix)
         self.bound_channels = config.get('Chat', 'BindToChannels', fallback=ConfigDefaults.bound_channels)
@@ -172,6 +174,7 @@ class ConfigDefaults:
     token = None    #
 
     owner_id = None
+    joinLink = None
     command_prefix = '!'
     bound_channels = set()
     autojoin_channels = set()
