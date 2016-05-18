@@ -1501,7 +1501,7 @@ class PlasmaBot(discord.Client):
 
         if not lines:
             lines.append(
-                'There are no songs queued! Queue something with {}play.'.format(self.config.command_prefix))
+                'There are no songs queued! Queue something with >play.'.format(self.config.command_prefix))
 
         message = '\n'.join(lines)
         return Response(message, delete_after=30)
@@ -1754,9 +1754,9 @@ class PlasmaBot(discord.Client):
 
 
     async def cmd_disconnect(self, server, message):
+        return Response("Disconnecting from" % server, delete_after=20)
         await self.disconnect_voice_client(server)
         await self._manual_delete_check(message)
-        return Response("Disconnecting from" % server, delete_after=20)
 
     async def cmd_restart(self):
         await self.disconnect_all_voice_clients()
