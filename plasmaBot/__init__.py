@@ -1,3 +1,3 @@
-from .bot import MusicBot
+from .bot import PlasmaBot
 
-__all__ = ['MusicBot']
+__all__ = ['PlasmaBot']
