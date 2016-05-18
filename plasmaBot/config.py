@@ -45,7 +45,7 @@ class Config:
         config = configparser.ConfigParser(interpolation=None)
         config.read(config_file, encoding='utf-8')
 
-        confsections = {"Credentials", "Permissions", "Chat", "MusicBot"}.difference(config.sections())
+        confsections = {"Credentials", "Permissions", "Chat", "PlasmaBot"}.difference(config.sections())
         if confsections:
             raise HelpfulError(
                 "One or more required config sections are missing.",
@@ -67,17 +67,17 @@ class Config:
         self.bound_channels = config.get('Chat', 'BindToChannels', fallback=ConfigDefaults.bound_channels)
         self.autojoin_channels =  config.get('Chat', 'AutojoinChannels', fallback=ConfigDefaults.autojoin_channels)
 
-        self.default_volume = config.getfloat('MusicBot', 'DefaultVolume', fallback=ConfigDefaults.default_volume)
-        self.skips_required = config.getint('MusicBot', 'SkipsRequired', fallback=ConfigDefaults.skips_required)
-        self.skip_ratio_required = config.getfloat('MusicBot', 'SkipRatio', fallback=ConfigDefaults.skip_ratio_required)
-        self.save_videos = config.getboolean('MusicBot', 'SaveVideos', fallback=ConfigDefaults.save_videos)
-        self.now_playing_mentions = config.getboolean('MusicBot', 'NowPlayingMentions', fallback=ConfigDefaults.now_playing_mentions)
-        self.auto_summon = config.getboolean('MusicBot', 'AutoSummon', fallback=ConfigDefaults.auto_summon)
-        self.auto_playlist = config.getboolean('MusicBot', 'UseAutoPlaylist', fallback=ConfigDefaults.auto_playlist)
-        self.auto_pause = config.getboolean('MusicBot', 'AutoPause', fallback=ConfigDefaults.auto_pause)
-        self.delete_messages  = config.getboolean('MusicBot', 'DeleteMessages', fallback=ConfigDefaults.delete_messages)
-        self.delete_invoking = config.getboolean('MusicBot', 'DeleteInvoking', fallback=ConfigDefaults.delete_invoking)
-        self.debug_mode = config.getboolean('MusicBot', 'DebugMode', fallback=ConfigDefaults.debug_mode)
+        self.default_volume = config.getfloat('PlasmaBot', 'DefaultVolume', fallback=ConfigDefaults.default_volume)
+        self.skips_required = config.getint('PlasmaBot', 'SkipsRequired', fallback=ConfigDefaults.skips_required)
+        self.skip_ratio_required = config.getfloat('PlasmaBot', 'SkipRatio', fallback=ConfigDefaults.skip_ratio_required)
+        self.save_videos = config.getboolean('PlasmaBot', 'SaveVideos', fallback=ConfigDefaults.save_videos)
+        self.now_playing_mentions = config.getboolean('PlasmaBot', 'NowPlayingMentions', fallback=ConfigDefaults.now_playing_mentions)
+        self.auto_summon = config.getboolean('PlasmaBot', 'AutoSummon', fallback=ConfigDefaults.auto_summon)
+        self.auto_playlist = config.getboolean('PlasmaBot', 'UseAutoPlaylist', fallback=ConfigDefaults.auto_playlist)
+        self.auto_pause = config.getboolean('PlasmaBot', 'AutoPause', fallback=ConfigDefaults.auto_pause)
+        self.delete_messages  = config.getboolean('PlasmaBot', 'DeleteMessages', fallback=ConfigDefaults.delete_messages)
+        self.delete_invoking = config.getboolean('PlasmaBot', 'DeleteInvoking', fallback=ConfigDefaults.delete_invoking)
+        self.debug_mode = config.getboolean('PlasmaBot', 'DebugMode', fallback=ConfigDefaults.debug_mode)
 
         self.blacklist_file = config.get('Files', 'BlacklistFile', fallback=ConfigDefaults.blacklist_file)
         self.auto_playlist_file = config.get('Files', 'AutoPlaylistFile', fallback=ConfigDefaults.auto_playlist_file)

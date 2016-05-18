@@ -21,11 +21,11 @@ from datetime import timedelta
 from random import choice, shuffle
 from collections import defaultdict
 
-from musicbot.playlist import Playlist
-from musicbot.player import MusicPlayer
-from musicbot.config import Config, ConfigDefaults
-from musicbot.permissions import Permissions, PermissionsDefaults
-from musicbot.utils import load_file, write_file, sane_round_int
+from plasmaBot.playlist import Playlist
+from plasmaBot.player import MusicPlayer
+from plasmaBot.config import Config, ConfigDefaults
+from plasmaBot.permissions import Permissions, PermissionsDefaults
+from plasmaBot.utils import load_file, write_file, sane_round_int
 
 from . import exceptions
 from . import downloader
@@ -63,7 +63,7 @@ class Response:
         self.delete_after = delete_after
 
 
-class MusicBot(discord.Client):
+class PlasmaBot(discord.Client):
     def __init__(self, config_file=ConfigDefaults.options_file, perms_file=PermissionsDefaults.perms_file):
         super().__init__()
 
@@ -87,7 +87,7 @@ class MusicBot(discord.Client):
             print("Warning: Autoplaylist is empty, disabling.")
             self.config.auto_playlist = False
 
-        self.headers['user-agent'] += ' MusicBot/%s' % BOTVERSION
+        self.headers['user-agent'] += ' plasmaBot/%s' % BOTVERSION
 
         # TODO: Do these properly
         ssd_defaults = {'last_np_msg': None, 'auto_paused': False}
@@ -103,7 +103,7 @@ class MusicBot(discord.Client):
             if not orig_msg or orig_msg.author.id == self.config.owner_id:
                 return await func(self, *args, **kwargs)
             else:
-                raise exceptions.PermissionsError("only the owner can use this command", expire_in=30)
+                raise exceptions.PermissionsError("only the owner can use this command", expire_in=25)
 
         return wrapper
 
@@ -595,7 +595,7 @@ class MusicBot(discord.Client):
             super().on_error(event, *args, **kwargs)
 
     async def on_ready(self):
-        print('\rConnected!  Musicbot v%s\n' % BOTVERSION)
+        print('\rConnected!  PlasmaBot v%s\n' % BOTVERSION)
 
         if self.config.owner_id == self.user.id:
             raise exceptions.HelpfulError(
@@ -679,7 +679,7 @@ class MusicBot(discord.Client):
 
         print()
         # t-t-th-th-that's all folks!
-
+    
     async def cmd_help(self, command=None):
         """
         Usage:
@@ -1918,9 +1918,6 @@ class MusicBot(discord.Client):
         if not all([before, after]):
             return
 
-        if before.voice_channel == after.voice_channel:
-            return
-
         if before.server.id not in self.players:
             return
 
@@ -1928,6 +1925,26 @@ class MusicBot(discord.Client):
             return
 
         my_voice_channel = after.server.me.voice_channel  # This should always work, right?
+        auto_paused = self.server_specific_data[after.server]['auto_paused']
+        
+        player = await self.get_player(my_voice_channel)
+            
+        num_deaf = sum(1 for m in my_voice_channel.voice_members if (
+            m.deaf or m.self_deaf))
+
+        if (len(my_voice_channel.voice_members) - 1) != num_deaf:
+            if auto_paused and player.is_paused:
+                print("[config:autopause] Unpausing")
+                self.server_specific_data[after.server]['auto_paused'] = False
+                player.resume()
+        else:
+            if not auto_paused and player.is_playing:
+                print("[config:autopause] Pausing")
+                self.server_specific_data[after.server]['auto_paused'] = True
+                player.pause()
+
+        if before.voice_channel == after.voice_channel:
+            return
 
         if not my_voice_channel:
             return
@@ -1940,9 +1957,6 @@ class MusicBot(discord.Client):
             return  # Not my channel
 
         moving = before == before.server.me
-        auto_paused = self.server_specific_data[after.server]['auto_paused']
-
-        player = await self.get_player(my_voice_channel)
 
         if sum(1 for m in my_voice_channel.voice_members if m != after.server.me):
             if auto_paused and player.is_paused:
@@ -1963,5 +1977,5 @@ class MusicBot(discord.Client):
 
 
 if __name__ == '__main__':
-    bot = MusicBot()
+    bot = PlasmaBot()
     bot.run()
