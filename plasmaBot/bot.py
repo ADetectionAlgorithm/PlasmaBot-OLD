@@ -1754,9 +1754,9 @@ class PlasmaBot(discord.Client):
 
 
     async def cmd_disconnect(self, server, message):
-        return Response("Disconnecting from" % server, delete_after=20)
         await self.disconnect_voice_client(server)
         await self._manual_delete_check(message)
+        return Response("Disconnecting from" % server, delete_after=20)
 
     async def cmd_restart(self):
         await self.disconnect_all_voice_clients()
