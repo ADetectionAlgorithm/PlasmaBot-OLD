@@ -1261,7 +1261,7 @@ class PlasmaBot(discord.Client):
         voice_client = self.the_voice_clients.get(channel.server.id, None)
         if voice_client and voice_client.channel.server == author.voice_channel.server:
             await self.move_voice_client(author.voice_channel)
-            return
+            return Response("Joining " % channel, delete_after=20)
 
         # move to _verify_vc_perms?
         chperms = author.voice_channel.permissions_for(author.voice_channel.server.me)
@@ -1756,14 +1756,17 @@ class PlasmaBot(discord.Client):
     async def cmd_disconnect(self, server, message):
         await self.disconnect_voice_client(server)
         await self._manual_delete_check(message)
+        return Response("Disconnecting from" % server, delete_after=20)
 
     async def cmd_restart(self):
         await self.disconnect_all_voice_clients()
         raise exceptions.RestartSignal
+        return Response("Restarting...", delete_after=30)
 
     async def cmd_shutdown(self):
         await self.disconnect_all_voice_clients()
         raise exceptions.TerminateSignal
+        return Response("Shutting Down...", delete_after=20)
 
     async def on_message(self, message):
         await self.wait_until_ready()
