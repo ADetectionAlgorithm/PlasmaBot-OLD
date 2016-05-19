@@ -754,6 +754,16 @@ class PlasmaBot(discord.Client):
 
     #OTHER COMMANDS
 
+    async def cmd_say(self, message)
+        """
+        Usage:
+            >say Message
+            
+        Tell @PlasmaBot to say something to the channel in which it was said.
+        """
+
+        return Response('%s' message, reply=True, delete_after=10)
+
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
         Usage:
