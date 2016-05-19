@@ -1973,7 +1973,7 @@ class PlasmaBot(discord.Client):
             if messageType == 'cmd':
                 messageTypeWritten = 'command'
 
-            else if messageType == 'auto':
+            if messageType == 'auto':
                 messageTypeWritten = 'autoreply'
 
             if message.author.id != self.config.owner_id:
