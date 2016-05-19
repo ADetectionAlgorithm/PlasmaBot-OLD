@@ -70,7 +70,7 @@ class Config:
         arE = config.getboolean('Autoreply', 'AutoreplyEnabled', fallback=ConfigDefaults.autoreplyEnabled)
         self.autoreplyEnabled = arE
         
-        if arE
+        if arE:
             arC = config.get('Autoreply', 'AutoCount', fallback=ConfigDefaults.autoreplyN)
             self.autoreplyCount = arC
             
