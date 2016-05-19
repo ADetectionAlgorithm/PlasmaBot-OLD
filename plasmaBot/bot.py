@@ -844,7 +844,7 @@ class PlasmaBot(discord.Client):
         except:
             raise exceptions.CommandError('Invalid URL provided:\n{}\n'.format(server_link), expire_in=30)
 
-    async def cmd_invite(self, message, server_link):
+    async def cmd_invite(self, message):
         """
         Usage:
             >invite
