@@ -1955,7 +1955,7 @@ class PlasmaBot(discord.Client):
             if params.pop('leftover_args', None) and messageType == 'cmd':
                 handler_kwargs['leftover_args'] = args
 
-            if messageType == 'cmd'
+            if messageType == 'cmd':
                 args_expected = []
                 for key, param in list(params.items()):
                     doc_key = '[%s=%s]' % (key, param.default) if param.default is not inspect.Parameter.empty else key
@@ -1971,10 +1971,10 @@ class PlasmaBot(discord.Client):
                         params.pop(key)
 
             if messageType == 'cmd'
-                messageTypeWritten = 'command'
+                messageTypeWritten = 'command':
 
             else if messageType == 'auto'
-                messageTypeWritten = 'autoreply'
+                messageTypeWritten = 'autoreply':
 
             if message.author.id != self.config.owner_id:
                 if user_permissions.command_whitelist and command not in user_permissions.command_whitelist:
