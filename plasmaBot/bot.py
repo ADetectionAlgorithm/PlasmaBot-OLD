@@ -1903,7 +1903,7 @@ class PlasmaBot(discord.Client):
                 await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
                 return
 
-            if messageType = 'auto' and not message.author.id == self.config.owner_id:
+            if messageType == 'auto' and not (message.author.id == self.config.owner_id and command == 'watergame'):
                 await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
                 return
 
