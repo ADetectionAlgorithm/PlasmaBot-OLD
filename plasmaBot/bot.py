@@ -810,20 +810,6 @@ class PlasmaBot(discord.Client):
             usr = user_mentions[0]
             return Response("%s's id is `%s`" % (usr.name, usr.id), reply=True, delete_after=35)
 
-    async def cmd_testid(self, author, user_mentions):
-        """
-        Usage:
-            >test [@user]
-        
-        A test command to test the ability to make new commands, an effort to reverse engineer the command infrastructure
-        """
-        if not user_mentions:
-            return Response('your id is `%s`' % author.id, reply=True, delete_after=35)
-        else:
-            usr = user_mentions[0]
-            return Response("%s's id is `%s`" % (usr.name, usr.id), reply=True, delete_after=35)
-
-
     @owner_only
     async def cmd_joinserver(self, message, server_link):
         """
