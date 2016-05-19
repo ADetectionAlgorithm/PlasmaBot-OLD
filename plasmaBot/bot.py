@@ -785,8 +785,8 @@ class PlasmaBot(discord.Client):
                 messageToSend = messageToSend + a + " "
         
             message.channel,
-                '%s' % messageToSend,
-                also_delete=message
+            '%s' % messageToSend,
+            also_delete=message
             )
         
             return
