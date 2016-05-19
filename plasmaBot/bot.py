@@ -1875,9 +1875,9 @@ class PlasmaBot(discord.Client):
         
         self.safe_print('message recieved ( %s )' % message_content )
         
-        if message.author == self.user:
-            self.safe_print("Ignoring message from myself (%s)" % message.content)
-            return
+        #if message.author == self.user:
+        #    self.safe_print("Ignoring message from myself (%s)" % message.content)
+        #    return
     
         slef.safe_print('stage1')
     
