@@ -750,6 +750,10 @@ class PlasmaBot(discord.Client):
 
             return Response(helpmsg, reply=True, delete_after=120)
 
+    #FRC COMMANDS
+
+    #OTHER COMMANDS
+
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
         Usage:
@@ -1832,7 +1836,26 @@ class PlasmaBot(discord.Client):
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
             return
-
+        
+        #AUTOREPLIES
+        autoparse = message_content
+        
+        if autoparse == "WaterGame":
+            await self.safe_send_message(
+                message.channel,
+                'Confirmed',
+                expire_in=600 if self.config.delete_messages else None,
+                also_delete=message if self.config.delete_invoking else None
+            )
+        else if autoparse = "lol":
+            await self.safe_send_message(
+                message.channel,
+                'lol',
+                expire_in=600 if self.config.delete_messages else None,
+                also_delete=message if self.config.delete_invoking else None
+            )
+        #COMMANDS
+        
         if message.author == self.user:
             self.safe_print("Ignoring command from myself (%s)" % message.content)
             return
