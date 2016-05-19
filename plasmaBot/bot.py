@@ -1871,7 +1871,9 @@ class PlasmaBot(discord.Client):
     async def on_message(self, message):
         await self.wait_until_ready()
         
-        self.safe_print('message recieved ( %s )' % message.content.strip() )
+        msgCont = message.content.strip()
+        
+        self.safe_print('message recieved ( %s )' % msgCont )
         
         message_content = message.content.strip()
         
