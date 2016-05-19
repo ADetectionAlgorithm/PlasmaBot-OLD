@@ -1955,7 +1955,7 @@ class PlasmaBot(discord.Client):
             if params.pop('leftover_args', None) and messageType == 'cmd':
                 handler_kwargs['leftover_args'] = args
 
-            if messageType = 'cmd'
+            if messageType == 'cmd'
                 args_expected = []
                 for key, param in list(params.items()):
                     doc_key = '[%s=%s]' % (key, param.default) if param.default is not inspect.Parameter.empty else key
