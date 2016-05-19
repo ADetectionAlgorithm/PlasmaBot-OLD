@@ -77,8 +77,8 @@ class Config:
             for i in range(1, arC):
                 Ndic = 'auto' + i + 'N'
                 Rdic = 'auto' + i + 'R'
-                arNDic[i] = config.get('Autoreply', Ndic, fallback=ConfigDefaults.autoreplyCount)
-                arRDic[i] = config.get('Autoreply', Rdic, fallback=ConfigDefaults.autoreplyCount)
+                arNDic[i] = config.get('Autoreply', Ndic, fallback=ConfigDefaults.autoreplyN)
+                arRDic[i] = config.get('Autoreply', Rdic, fallback=ConfigDefaults.autoreplyR)
                     
             self.autoN = arNDic
             self.autoR = arRDic
@@ -194,7 +194,7 @@ class ConfigDefaults:
     autoreplyEnabled = False
     autoreplyCount = 0
     autoreplyN = None
-    autoreplyV = None
+    autoreplyR = None
 
     owner_id = None
     clientID = None
