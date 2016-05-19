@@ -763,7 +763,10 @@ class PlasmaBot(discord.Client):
         """
         
         if leftover_args:
-            messageToSend = "".join(leftover_args)
+            messageToSend = ""
+            for a in leftover_args:
+                messageToSend = messageToSend % a % " "
+            
             return Response('%s' % messageToSend, reply=True, delete_after=120)
 
     async def cmd_blacklist(self, message, user_mentions, option, something):
