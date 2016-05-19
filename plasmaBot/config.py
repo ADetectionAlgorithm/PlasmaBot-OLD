@@ -45,7 +45,7 @@ class Config:
         config = configparser.ConfigParser(interpolation=None)
         config.read(config_file, encoding='utf-8')
 
-        confsections = {"Credentials", "BotInfo", "Permissions", "Chat", "PlasmaBot"}.difference(config.sections())
+        confsections = {"Credentials", "BotInfo", "Permissions", "Autoreply", "Chat", "PlasmaBot"}.difference(config.sections())
         if confsections:
             raise HelpfulError(
                 "One or more required config sections are missing.",
@@ -62,9 +62,25 @@ class Config:
 
         self.auth = None
         
-        self.clientID = config.get('BotInfo', 'ClientID', fallback=ConfigDefaults.joinLink)
+        self.clientID = config.get('BotInfo', 'ClientID', fallback=ConfigDefaults.clientID)
         
         self.owner_id = config.get('Permissions', 'OwnerID', fallback=ConfigDefaults.owner_id)
+        
+        
+        arE = config.getboolean('Autoreply', 'AutoreplyEnabled', fallback=ConfigDefaults.autoreplyEnabled)
+        self.autoreplyEnabled = arE
+        
+        if arE
+            arC = config.get('Autoreply', 'AutoCount', fallback=ConfigDefaults.autoreplyN)
+            self.autoreplyCount = arC
+            
+            for arValue in range(1, arC):
+                arNDic[arValue] = config.get('Autoreply', 'auto%sN' % arValue, fallback=ConfigDefaults.autoreplyCount)
+                arRDic[arValue] = config.get('Autoreply', 'auto%sR' % arValue, fallback=ConfigDefaults.autoreplyCount)
+                    
+            self.autoN = arNDic
+            self.autoR = arRDic
+        
         self.command_prefix = config.get('Chat', 'CommandPrefix', fallback=ConfigDefaults.command_prefix)
         self.bound_channels = config.get('Chat', 'BindToChannels', fallback=ConfigDefaults.bound_channels)
         self.autojoin_channels =  config.get('Chat', 'AutojoinChannels', fallback=ConfigDefaults.autojoin_channels)
@@ -173,8 +189,13 @@ class ConfigDefaults:
     password = None # This is not where you put your login info, go away.
     token = None    #
 
+    autoreplyEnabled = False
+    autoreplyCount = 0
+    autoreplyN = None
+    autoreplyV = None
+
     owner_id = None
-    joinLink = None
+    clientID = None
     command_prefix = '!'
     bound_channels = set()
     autojoin_channels = set()

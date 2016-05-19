@@ -762,13 +762,14 @@ class PlasmaBot(discord.Client):
         @PlasmaBot will respond to your messages if they fit the profiles set.
         """
         
-        if leftover_args:
+        if leftover_args and self.autoreplyEnabled:
             messageToSend = ""
             for a in leftover_args:
                 messageToSend = messageToSend + a + " "
             
-            return Response('%s' % messageToSend, reply=True, delete_after=120)
-
+            for arValue in (1, self.autoreplyCount)
+                if messageToSend == self.autoN[arValue]
+                    return Response('%s' % self.autoR[arValue], delete_after=120)
 
     async def cmd_say(self, message, leftover_args):
         """
