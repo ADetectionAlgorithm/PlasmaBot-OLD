@@ -750,6 +750,25 @@ class PlasmaBot(discord.Client):
 
             return Response(helpmsg, reply=True, delete_after=120)
 
+    #FRC COMMANDS
+
+    #OTHER COMMANDS
+
+    async def cmd_say(self, message, leftover_args):
+        """
+        Usage:
+            >say Message
+            
+        Tell @PlasmaBot to say something to the channel in which it was said.
+        """
+        
+        if leftover_args:
+            messageToSend = ""
+            for a in leftover_args:
+                messageToSend = messageToSend + a + " "
+            
+            return Response('%s' % messageToSend, reply=True, delete_after=120)
+
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
         Usage:
@@ -1291,7 +1310,7 @@ class PlasmaBot(discord.Client):
                 delete_after=30
             )
 
-    async def cmd_summon(self, channel, author, voice_channel):
+    async def cmd_summon(self, channel, author, voice_channel, message):
         """
         Usage:
             >summon
@@ -1305,7 +1324,10 @@ class PlasmaBot(discord.Client):
         voice_client = self.the_voice_clients.get(channel.server.id, None)
         if voice_client and voice_client.channel.server == author.voice_channel.server:
             await self.move_voice_client(author.voice_channel)
-            return Response("Joining " % channel, delete_after=20)
+            return Response(
+                'Joined %s' % voice_channel,
+                delete_after=20
+            )
 
         # move to _verify_vc_perms?
         chperms = author.voice_channel.permissions_for(author.voice_channel.server.me)
@@ -1468,7 +1490,12 @@ class PlasmaBot(discord.Client):
         Sets the playback volume. Accepted values are from 1 to 100.
         Putting + or - before the volume will make the volume change relative to the current volume.
         """
-
+        volumeresume = 0
+        
+        if player.is_paused and new_volume != 0:
+            player.resume()
+            volumeresume = 1
+        
         if not new_volume:
             return Response('Current volume: `%s%%`' % int(player.volume * 100), reply=True, delete_after=20)
 
@@ -1495,12 +1522,30 @@ class PlasmaBot(discord.Client):
 
         else:
             if relative:
-                raise exceptions.CommandError(
-                    'Unreasonable volume change provided: {}{:+} -> {}%.  Provide a change between {} and {:+}.'.format(
-                        old_volume, vol_change, old_volume + vol_change, 1 - old_volume, 100 - old_volume), expire_in=20)
+                
+                if new_volume == 0:
+                    player.pause()
+                    player.volume = 0.01
+                    return Response('updated volume from %d to 0 (paused @1)' % old_volume, reply=True, delete_after=20)
+            
+                else:
+                    if volumeresume == 1:
+                        player.pause()
+                
+                    raise exceptions.CommandError(
+                        'Unreasonable volume change provided: {}{:+} -> {}%.  Provide a change between {} and {:+}.'.format(
+                            old_volume, vol_change, old_volume + vol_change, 1 - old_volume, 100 - old_volume), expire_in=20)
             else:
-                raise exceptions.CommandError(
-                    'Unreasonable volume provided: {}%. Provide a value between 1 and 100.'.format(new_volume), expire_in=20)
+                if new_volume == 0:
+                    player.pause()
+                    player.volume = 0.01
+                    return Response('updated volume from %d to 0 (paused @1)' % old_volume, reply=True, delete_after=20)
+                else:
+                    if volumeresume == 1:
+                        player.pause()
+                    
+                    raise exceptions.CommandError(
+                        'Unreasonable volume provided: {}%. Provide a value between 1 and 100.'.format(new_volume), expire_in=20)
 
     async def cmd_queue(self, channel, player):
         """
@@ -1829,7 +1874,7 @@ class PlasmaBot(discord.Client):
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
             return
-
+        
         if message.author == self.user:
             self.safe_print("Ignoring command from myself (%s)" % message.content)
             return
