@@ -1899,7 +1899,7 @@ class PlasmaBot(discord.Client):
 
             command = 'auto'
             
-            *args = message_content.split()
+            args = message_content.split( )
             handler = getattr(self, 'cmd_auto', None)
 
         else:
