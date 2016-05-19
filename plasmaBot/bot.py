@@ -1291,7 +1291,7 @@ class PlasmaBot(discord.Client):
                 delete_after=30
             )
 
-    async def cmd_summon(self, channel, author, voice_channel):
+    async def cmd_summon(self, channel, author, voice_channel, message):
         """
         Usage:
             >summon
