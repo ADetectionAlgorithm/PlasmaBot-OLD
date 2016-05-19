@@ -1870,29 +1870,40 @@ class PlasmaBot(discord.Client):
 
     async def on_message(self, message):
         await self.wait_until_ready()
-
+        
+        messageType = undetermined
+        
         message_content = message.content.strip()
-        if not message_content.startswith(self.config.command_prefix):
-            return
         
         if message.author == self.user:
-            self.safe_print("Ignoring command from myself (%s)" % message.content)
+            self.safe_print("Ignoring message from myself (%s)" % message.content)
             return
-
+        
         if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
-            return  # if I want to log this I just move it under the prefix check
+            self.safe_print("Message (%s) not sent in private / non-bound channel" % message.content)
+            return
+        
+        if message_content.startswith(self.config.command_prefix):
+            messageType = auto
+            message_content = message_content.replace(" ", "_")
+            command, *args = message_content.split()
+            command = command.lower().strip()
 
-        command, *args = message_content.split()
-        command = command[len(self.config.command_prefix):].lower().strip()
+        else:
+            messageType = cmd
+            command, *args = message_content.split()
+            command = command[len(self.config.command_prefix):].lower().strip()
 
-        handler = getattr(self, 'cmd_%s' % command, None)
+        handler = getattr(self, '%s_%s' % (messageType, command), None)
         if not handler:
             return
 
         if message.channel.is_private:
-            if not (message.author.id == self.config.owner_id and command == 'joinserver'):
-                await self.send_message(message.channel, 'You cannot use this bot in private messages.')
+            if messageType == 'cmd' and not (message.author.id == self.config.owner_id and (command == 'joinserver' or command == 'invite')):
+                await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
                 return
+            else if messageType = 'auto' and not (message.author == self.config.owner_id and command == 'watergame')
+                await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
 
         if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
             self.safe_print("[User blacklisted] {0.id}/{0.name} ({1})".format(message.author, message_content))
@@ -1939,32 +1950,39 @@ class PlasmaBot(discord.Client):
             if params.pop('voice_channel', None):
                 handler_kwargs['voice_channel'] = message.server.me.voice_channel
 
-            if params.pop('leftover_args', None):
+            if params.pop('leftover_args', None) and messageType == 'cmd':
                 handler_kwargs['leftover_args'] = args
 
-            args_expected = []
-            for key, param in list(params.items()):
-                doc_key = '[%s=%s]' % (key, param.default) if param.default is not inspect.Parameter.empty else key
-                args_expected.append(doc_key)
+            if messageType = 'cmd'
+                args_expected = []
+                for key, param in list(params.items()):
+                    doc_key = '[%s=%s]' % (key, param.default) if param.default is not inspect.Parameter.empty else key
+                    args_expected.append(doc_key)
 
-                if not args and param.default is not inspect.Parameter.empty:
-                    params.pop(key)
-                    continue
+                    if not args and param.default is not inspect.Parameter.empty:
+                        params.pop(key)
+                        continue
 
-                if args:
-                    arg_value = args.pop(0)
-                    handler_kwargs[key] = arg_value
-                    params.pop(key)
+                    if args:
+                        arg_value = args.pop(0)
+                        handler_kwargs[key] = arg_value
+                        params.pop(key)
+
+            if messageType == 'cmd'
+                messageTypeWritten = 'command'
+
+            else if messageType == 'auto'
+                messageTypeWritten = 'autoreply'
 
             if message.author.id != self.config.owner_id:
                 if user_permissions.command_whitelist and command not in user_permissions.command_whitelist:
                     raise exceptions.PermissionsError(
-                        "This command is not enabled for your group (%s)." % user_permissions.name,
+                        "This %s is not enabled for your group (%s)." % (messageTypeWritten, user_permissions.name),
                         expire_in=20)
 
                 elif user_permissions.command_blacklist and command in user_permissions.command_blacklist:
                     raise exceptions.PermissionsError(
-                        "This command is disabled for your group (%s)." % user_permissions.name,
+                        "This %s is disabled for your group (%s)." % (messageTypeWritten, user_permissions.name),
                         expire_in=20)
 
             if params:
