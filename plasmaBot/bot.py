@@ -1872,68 +1872,34 @@ class PlasmaBot(discord.Client):
         await self.wait_until_ready()
 
         message_content = message.content.strip()
-        
-        replyType = none
-        
         if not message_content.startswith(self.config.command_prefix):
-            
-            replyType = autoreply
-            
-            autoreply = message_content.replace(" ", "_")
-            command, *args = autoreply.split()
-            command = command.lower()
-            
-            handler = getattr(self, 'auto_%s' % command, None)
-            
-            if not handler:
+            return
+        
+        if message.author == self.user:
+            self.safe_print("Ignoring command from myself (%s)" % message.content)
+            return
+
+        if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
+            return  # if I want to log this I just move it under the prefix check
+
+        command, *args = message_content.split()
+        command = command[len(self.config.command_prefix):].lower().strip()
+
+        handler = getattr(self, 'cmd_%s' % command, None)
+        if not handler:
+            return
+
+        if message.channel.is_private:
+            if not (message.author.id == self.config.owner_id and command == 'joinserver'):
+                await self.send_message(message.channel, 'You cannot use this bot in private messages.')
                 return
-                    
-            if message.author == self.user:
-                self.safe_print("Ignoring autoreply from myself (%s)" % autoMSG)
-                return
-            
-            if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
-                return
-            
-            if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
-                self.safe_print("[User blacklisted] {0.id}/{0.name} ({1})".format(message.author, message_content))
-                return
-            
-            else:
-                self.safe_print("[AutoReply] {0.id}/{0.name} ({1})".format(message.author, message_content))
-            
+
+        if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
+            self.safe_print("[User blacklisted] {0.id}/{0.name} ({1})".format(message.author, message_content))
             return
 
         else:
-            
-            replyType = command
-            
-            if message.author == self.user:
-                self.safe_print("Ignoring command from myself (%s)" % message.content)
-                return
-
-            if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
-                return
-
-            command, *args = message_content.split()
-            command = command[len(self.config.command_prefix):].lower().strip()
-
-            handler = getattr(self, 'cmd_%s' % command, None)
-
-            if not handler:
-                return
-
-            if message.channel.is_private:
-                if not (message.author.id == self.config.owner_id and (command == 'joinserver' or command =='invite')):
-                    await self.send_message(message.channel, 'You cannot use this bot in private messages.')
-                    return
-
-            if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
-                self.safe_print("[User blacklisted] {0.id}/{0.name} ({1})".format(message.author, message_content))
-                return
-
-            else:
-                self.safe_print("[Command] {0.id}/{0.name} ({1})".format(message.author, message_content))
+            self.safe_print("[Command] {0.id}/{0.name} ({1})".format(message.author, message_content))
 
         user_permissions = self.permissions.for_user(message.author)
 
@@ -1993,12 +1959,12 @@ class PlasmaBot(discord.Client):
             if message.author.id != self.config.owner_id:
                 if user_permissions.command_whitelist and command not in user_permissions.command_whitelist:
                     raise exceptions.PermissionsError(
-                        "This %s is not enabled for your group (%s)." % (replyType, user_permissions.name),
+                        "This command is not enabled for your group (%s)." % user_permissions.name,
                         expire_in=20)
 
                 elif user_permissions.command_blacklist and command in user_permissions.command_blacklist:
                     raise exceptions.PermissionsError(
-                        "This %s is disabled for your group (%s)." % (replyType, user_permissions.name),
+                        "This command is disabled for your group (%s)." % user_permissions.name,
                         expire_in=20)
 
             if params:
