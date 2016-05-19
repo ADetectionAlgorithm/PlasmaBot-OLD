@@ -762,7 +762,7 @@ class PlasmaBot(discord.Client):
         @PlasmaBot will respond to your messages if they fit the profiles set.
         """
         
-        if leftover_args and self.autoreplyEnabled:
+        if leftover_args and self.autoreplyEnabled == 'yes':
             inputMsg = ""
             for a in leftover_args:
                 inputMsg = inputMsg + a + " "

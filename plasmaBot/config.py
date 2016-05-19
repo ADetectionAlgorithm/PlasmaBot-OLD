@@ -67,10 +67,10 @@ class Config:
         self.owner_id = config.get('Permissions', 'OwnerID', fallback=ConfigDefaults.owner_id)
         
         
-        arE = config.getboolean('Autoreply', 'AutoreplyEnabled', fallback=ConfigDefaults.autoreplyEnabled)
+        arE = config.get('Autoreply', 'AutoreplyEnabled', fallback=ConfigDefaults.autoreplyEnabled)
         self.autoreplyEnabled = arE
         
-        if arE:
+        if arE == "yes":
             arC = config.get('Autoreply', 'AutoCount', fallback=ConfigDefaults.autoreplyN)
             self.autoreplyCount = arC
             
