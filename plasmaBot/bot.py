@@ -772,6 +772,10 @@ class PlasmaBot(discord.Client):
                 if inputMsg == self.autoN[i]:
                     return Response('%s' % self.autoR[i], delete_after=120)
 
+            return Response('Error', delete_after=120)
+
+        return
+
     async def cmd_say(self, message, leftover_args):
         """
         Usage:
