@@ -627,11 +627,43 @@ class PlasmaBot(discord.Client):
         print()
 
         if self.config.bound_channels:
+            chlist = set(self.get_channel(i) for i in self.config.bound_channels if i)
+            invalids = set()
+
+            invalids.update(c for c in chlist if c.type == discord.ChannelType.voice)
+            chlist.difference_update(invalids)
+            self.config.bound_channels.difference_update(invalids)
+
             print("Bound to text channels:")
-            chlist = [self.get_channel(i) for i in self.config.bound_channels if i]
             [self.safe_print(' - %s/%s' % (ch.server.name.strip(), ch.name.strip())) for ch in chlist if ch]
+
+            if invalids and self.config.debug_mode:
+                print("Not binding to voice channels:")
+                [self.safe_print(' - %s/%s' % (ch.server.name.strip(), ch.name.strip())) for ch in invalids if ch]
+
+            print()
+
         else:
             print("Not bound to any text channels")
+
+        if self.config.autojoin_channels:
+            chlist = set(self.get_channel(i) for i in self.config.autojoin_channels if i)
+            invalids = set()
+
+            invalids.update(c for c in chlist if c.type == discord.ChannelType.voice)
+            chlist.difference_update(invalids)
+            self.config.autojoin_channels.difference_update(invalids)
+
+            print("Autojoining voice chanels:")
+            [self.safe_print(' - %s/%s' % (ch.server.name.strip(), ch.name.strip())) for ch in chlist if ch]
+
+            if invalids and self.config.debug_mode:
+                print("Cannot join text channels:")
+                [self.safe_print(' - %s/%s' % (ch.server.name.strip(), ch.name.strip())) for ch in invalids if ch]
+
+        else:
+            print("Not autojoining any voice channels")
+
 
         print()
         print("Options:")
@@ -789,10 +821,7 @@ class PlasmaBot(discord.Client):
 
         if self.user.bot:
             return Response(
-                "Bot accounts can't use invite links!  See: "
-                "https://discordapp.com/developers/docs/topics/oauth2#adding-bots-to-guilds",
-                reply=True, delete_after=30
-            )
+                "I'm a bot!  I can't use an invite!  Lame? Add me here instead: https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=0" % self.config.clientID,reply=True, delete_after=120)
 
         try:
             await self.accept_invite(server_link)
@@ -800,6 +829,21 @@ class PlasmaBot(discord.Client):
 
         except:
             raise exceptions.CommandError('Invalid URL provided:\n{}\n'.format(server_link), expire_in=30)
+
+    async def cmd_invite(self, message):
+        """
+        Usage:
+            >invite
+    
+        Want to invite PlasmaBot to your Server?  Fire this command to get the invite Link.
+        """
+        
+        if self.config.clientID:
+            return Response(
+                "Invite me (PlasmaBot) to your server with this Link: https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=0" % self.config.clientID,reply=True, delete_after=120)
+        else:
+            return Response(
+                "Sorry, I do not accept invites.  If you believe this to be an error, please contact the bot-admin", reply=True, delete_after=30)
 
     async def cmd_play(self, player, channel, author, permissions, leftover_args, song_url):
         """
@@ -1261,7 +1305,7 @@ class PlasmaBot(discord.Client):
         voice_client = self.the_voice_clients.get(channel.server.id, None)
         if voice_client and voice_client.channel.server == author.voice_channel.server:
             await self.move_voice_client(author.voice_channel)
-            return
+            return Response("Joining " % channel, delete_after=20)
 
         # move to _verify_vc_perms?
         chperms = author.voice_channel.permissions_for(author.voice_channel.server.me)
@@ -1501,7 +1545,7 @@ class PlasmaBot(discord.Client):
 
         if not lines:
             lines.append(
-                'There are no songs queued! Queue something with {}play.'.format(self.config.command_prefix))
+                'There are no songs queued! Queue something with >play.'.format(self.config.command_prefix))
 
         message = '\n'.join(lines)
         return Response(message, delete_after=30)
@@ -1753,15 +1797,29 @@ class PlasmaBot(discord.Client):
         return Response(":ok_hand:", delete_after=20)
 
 
-    async def cmd_disconnect(self, server, message):
+    async def cmd_disconnect(self, server, message, channel):
+        await self.safe_send_message(
+            message.channel,
+            'Disconnecting from %s...' % message.server.me.voice_channel,
+            expire_in=30 if self.config.delete_messages else None,
+            also_delete=message if self.config.delete_invoking else None
+            )
         await self.disconnect_voice_client(server)
         await self._manual_delete_check(message)
 
-    async def cmd_restart(self):
+    async def cmd_restart(self, message):
+        await self.safe_send_message(
+            message.channel,
+            'Restarting...'
+            )
         await self.disconnect_all_voice_clients()
         raise exceptions.RestartSignal
 
-    async def cmd_shutdown(self):
+    async def cmd_shutdown(self, message):
+        await self.safe_send_message(
+            message.channel,
+            'Shutting Down...'
+            )
         await self.disconnect_all_voice_clients()
         raise exceptions.TerminateSignal
 
@@ -1779,7 +1837,7 @@ class PlasmaBot(discord.Client):
         if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
             return  # if I want to log this I just move it under the prefix check
 
-        command, *args = message_content.split()  # Uh, doesn't this break prefixes with spaces in them (it doesn't, config parser already breaks them)
+        command, *args = message_content.split()
         command = command[len(self.config.command_prefix):].lower().strip()
 
         handler = getattr(self, 'cmd_%s' % command, None)
