@@ -1545,6 +1545,7 @@ class PlasmaBot(discord.Client):
                 if new_volume == 0:
                     player.pause()
                     player.volume = 0.01
+                    return Response('updated volume from %d to 0 (paused @1%)' % (old_volume, new_volume), reply=True, delete_after=20)
             
                 else:
                     if volumeresume == 1:
@@ -1557,6 +1558,7 @@ class PlasmaBot(discord.Client):
                 if new_volume == 0:
                     player.pause()
                     player.volume = 0.01
+                    return Response('updated volume from %d to 0 (paused @1%)' % (old_volume, new_volume), reply=True, delete_after=20)
                 else:
                     if volumeresume == 1:
                         player.pause()
