@@ -1883,7 +1883,7 @@ class PlasmaBot(discord.Client):
         #    self.safe_print("Message (%s) not sent in private / non-bound channel" % message.content)
         #    return
         
-        self.print('stage2')
+        self.safe_print('stage2')
         
         if not message_content.startswith(self.config.command_prefix):
             messageType = auto
