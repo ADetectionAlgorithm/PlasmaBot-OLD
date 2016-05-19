@@ -769,6 +769,28 @@ class PlasmaBot(discord.Client):
             
             return Response('%s' % messageToSend, reply=True, delete_after=120)
 
+    @owner_only
+    async def cmd_silentsay(self, message, leftover_args):
+        """
+        Usage:
+            >silentsay Message
+        
+        Tell @PlasmaBot to say something to the channel in which it was said.
+        @PlasmaBot will do so silently, and will delete your message.
+        """
+            
+        if leftover_args:
+            messageToSend = ""
+            for a in leftover_args:
+                messageToSend = messageToSend + a + " "
+        
+            message.channel,
+                '%s' % messageToSend,
+                also_delete=message
+            )
+        
+            return
+
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
         Usage:
