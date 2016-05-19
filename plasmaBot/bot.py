@@ -763,14 +763,14 @@ class PlasmaBot(discord.Client):
         """
         
         if leftover_args and self.autoreplyEnabled:
-            messageToSend = ""
+            inputMsg = ""
             for a in leftover_args:
-                messageToSend = messageToSend + a + " "
+                inputMsg = inputMsg + a + " "
             
             arC = self.autoreplyCount
-            for arValue in range( 1, arC ):
-                if messageToSend == self.autoN[arValue]
-                    return Response('%s' % self.autoR[arValue], delete_after=120)
+            for i in range( 1, arC ):
+                if inputMsg == self.autoN[i]
+                    return Response('%s' % self.autoR[i], delete_after=120)
 
     async def cmd_say(self, message, leftover_args):
         """
