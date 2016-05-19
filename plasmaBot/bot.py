@@ -754,15 +754,17 @@ class PlasmaBot(discord.Client):
 
     #OTHER COMMANDS
 
-    async def cmd_say(self, message, fullMessage):
+    async def cmd_say(self, message, leftover_args):
         """
         Usage:
             >say Message
             
         Tell @PlasmaBot to say something to the channel in which it was said.
         """
-
-        return Response('%s' % fullMessage, reply=True, delete_after=120)
+        
+        if leftover_args:
+            messageToSend = "".join(leftover_args)
+            return Response('%s' % messageToSend, reply=True, delete_after=120)
 
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
@@ -1886,9 +1888,6 @@ class PlasmaBot(discord.Client):
             handler_kwargs = {}
             if params.pop('message', None):
                 handler_kwargs['message'] = message
-            
-            if params.pop('fullMessage', None):
-                handler_kwargs['fullMessage'] = args
 
             if params.pop('channel', None):
                 handler_kwargs['channel'] = message.channel
