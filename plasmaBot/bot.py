@@ -810,10 +810,10 @@ class PlasmaBot(discord.Client):
             usr = user_mentions[0]
             return Response("%s's id is `%s`" % (usr.name, usr.id), reply=True, delete_after=35)
 
-    async def cmd_testID(self, author, user_mentions):
+    async def cmd_testid(self, author, user_mentions):
         """
         Usage:
-        >test [@user]
+            >test [@user]
         
         A test command to test the ability to make new commands, an effort to reverse engineer the command infrastructure
         """
