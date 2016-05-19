@@ -1873,8 +1873,6 @@ class PlasmaBot(discord.Client):
         
         self.safe_print('message recieved')
         
-        messageType = undetermined
-        
         message_content = message.content.strip()
         
         self.safeprint('message content (%s)' % message_content)
