@@ -1540,8 +1540,11 @@ class PlasmaBot(discord.Client):
                     'Unreasonable volume change provided: {}{:+} -> {}%.  Provide a change between {} and {:+}.'.format(
                         old_volume, vol_change, old_volume + vol_change, 1 - old_volume, 100 - old_volume), expire_in=20)
             else:
-                raise exceptions.CommandError(
-                    'Unreasonable volume provided: {}%. Provide a value between 1 and 100.'.format(new_volume), expire_in=20)
+                if new_volume = 0:
+                    player.pause()
+                else:
+                    raise exceptions.CommandError(
+                        'Unreasonable volume provided: {}%. Provide a value between 1 and 100.'.format(new_volume), expire_in=20)
 
     async def cmd_queue(self, channel, player):
         """
