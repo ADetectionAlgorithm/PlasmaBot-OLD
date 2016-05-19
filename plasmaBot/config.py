@@ -77,11 +77,11 @@ class Config:
             for i in range(1, int(arC)):
                 Ndic = 'auto' + i + 'N'
                 Rdic = 'auto' + i + 'R'
-                arNDic[i] = config.get('Autoreply', Ndic, fallback=ConfigDefaults.autoreplyN)
-                arRDic[i] = config.get('Autoreply', Rdic, fallback=ConfigDefaults.autoreplyR)
+                self.autoN[i] = config.get('Autoreply', Ndic, fallback=ConfigDefaults.autoreplyN)
+                self.autoR = config.get('Autoreply', Rdic, fallback=ConfigDefaults.autoreplyR)
                     
-            self.autoN = arNDic
-            self.autoR = arRDic
+                    #self.autoN = arNDic
+                    #self.autoR = arRDic
         
         self.command_prefix = config.get('Chat', 'CommandPrefix', fallback=ConfigDefaults.command_prefix)
         self.bound_channels = config.get('Chat', 'BindToChannels', fallback=ConfigDefaults.bound_channels)
