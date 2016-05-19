@@ -754,7 +754,7 @@ class PlasmaBot(discord.Client):
 
     #OTHER COMMANDS
 
-    async def cmd_say(self, message, messageToSay):
+    async def cmd_say(self, message, fullMessage):
         """
         Usage:
             >say Message
@@ -762,7 +762,7 @@ class PlasmaBot(discord.Client):
         Tell @PlasmaBot to say something to the channel in which it was said.
         """
 
-        return Response('%s' % messageToSay, reply=True, delete_after=10)
+        return Response('%s' % fullMessage, reply=True, delete_after=10)
 
     async def cmd_blacklist(self, message, user_mentions, option, something):
         """
@@ -1886,6 +1886,9 @@ class PlasmaBot(discord.Client):
             handler_kwargs = {}
             if params.pop('message', None):
                 handler_kwargs['message'] = message
+            
+            if params.pop('fullMessage', None):
+                handler_kwargs['fullMessage'] = command
 
             if params.pop('channel', None):
                 handler_kwargs['channel'] = message.channel
