@@ -1873,6 +1873,8 @@ class PlasmaBot(discord.Client):
         
         message_content = message.content.strip()
         
+        self.safe_print('t')
+        
         if message.author == self.user:
             self.safe_print("Ignoring message from myself (%s)" % message.content)
             return
