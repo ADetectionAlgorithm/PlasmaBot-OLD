@@ -1549,7 +1549,7 @@ class PlasmaBot(discord.Client):
                     player.pause()
                     player.volume = 0.01
                 else:
-                    if volumeresume
+                    if volumeresume:
                         player.pause()
                     
                     raise exceptions.CommandError(
