@@ -769,7 +769,7 @@ class PlasmaBot(discord.Client):
             
             arC = self.autoreplyCount
             for i in range( 1, arC ):
-                if inputMsg == self.autoN[i]
+                if inputMsg == self.autoN[i]:
                     return Response('%s' % self.autoR[i], delete_after=120)
 
     async def cmd_say(self, message, leftover_args):
