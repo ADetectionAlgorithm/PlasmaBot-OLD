@@ -1895,7 +1895,7 @@ class PlasmaBot(discord.Client):
             command = command[len(self.config.command_prefix):].lower().strip()
 
         handler = getattr(self, '%s_%s' % (messageType, command), None)
-        self.safe_print("%s_%s" % (messageType, command)
+        self.safe_print("%s_%s" % (messageType, command))
         if not handler:
             return
 
