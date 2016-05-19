@@ -1796,20 +1796,23 @@ class PlasmaBot(discord.Client):
         return Response(":ok_hand:", delete_after=20)
 
 
-    async def cmd_disconnect(self, server, message):
+    async def cmd_disconnect(self, server, message, channel):
+        await self.safe_send_message(
+            message.channel,
+            'test',
+            expire_in=30,
+            also_delete=message if self.config.delete_invoking else None
+            )
         await self.disconnect_voice_client(server)
         await self._manual_delete_check(message)
-        return Response("Disconnecting from" % server, delete_after=20)
 
     async def cmd_restart(self):
         await self.disconnect_all_voice_clients()
         raise exceptions.RestartSignal
-        return Response("Restarting...", delete_after=30)
 
     async def cmd_shutdown(self):
         await self.disconnect_all_voice_clients()
         raise exceptions.TerminateSignal
-        return Response("Shutting Down...", delete_after=20)
 
     async def on_message(self, message):
         await self.wait_until_ready()
@@ -1825,7 +1828,7 @@ class PlasmaBot(discord.Client):
         if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
             return  # if I want to log this I just move it under the prefix check
 
-        command, *args = message_content.split()  # Uh, doesn't this break prefixes with spaces in them (it doesn't, config parser already breaks them)
+        command, *args = message_content.split()
         command = command[len(self.config.command_prefix):].lower().strip()
 
         handler = getattr(self, 'cmd_%s' % command, None)
