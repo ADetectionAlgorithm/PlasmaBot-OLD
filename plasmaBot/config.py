@@ -78,7 +78,7 @@ class Config:
                 Ndic = 'auto' + i + 'N'
                 Rdic = 'auto' + i + 'R'
                 self.autoN[i] = config.get('Autoreply', Ndic, fallback=ConfigDefaults.autoreplyN)
-                self.autoR = config.get('Autoreply', Rdic, fallback=ConfigDefaults.autoreplyR)
+                self.autoR[i] = config.get('Autoreply', Rdic, fallback=ConfigDefaults.autoreplyR)
                     
                     #self.autoN = arNDic
                     #self.autoR = arRDic
