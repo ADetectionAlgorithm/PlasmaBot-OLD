@@ -1509,7 +1509,9 @@ class PlasmaBot(discord.Client):
         Sets the playback volume. Accepted values are from 1 to 100.
         Putting + or - before the volume will make the volume change relative to the current volume.
         """
-
+        if player.is_paused && new_volume != 0:
+            player.resume()
+        
         if not new_volume:
             return Response('Current volume: `%s%%`' % int(player.volume * 100), reply=True, delete_after=20)
 
