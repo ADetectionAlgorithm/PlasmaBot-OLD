@@ -1837,19 +1837,6 @@ class PlasmaBot(discord.Client):
         if not message_content.startswith(self.config.command_prefix):
             return
         
-        #AUTOREPLIES
-        autoparse = message_content
-        
-        if autoparse == "WaterGame":
-            await self.safe_send_message(
-                message.channel,
-                'Confirmed',
-                expire_in=600 if self.config.delete_messages else None,
-                also_delete=message if self.config.delete_invoking else None
-            )
-        
-        #COMMANDS
-        
         if message.author == self.user:
             self.safe_print("Ignoring command from myself (%s)" % message.content)
             return
