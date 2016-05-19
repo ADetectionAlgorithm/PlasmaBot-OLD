@@ -1875,15 +1875,17 @@ class PlasmaBot(discord.Client):
         
         self.safe_print('message recieved ( %s )' % message_content )
         
-        self.safeprint('message content (%s)' % message_content)
-        
         if message.author == self.user:
             self.safe_print("Ignoring message from myself (%s)" % message.content)
             return
-        
+    
+        slef.safe_print('stage1')
+    
         if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
             self.safe_print("Message (%s) not sent in private / non-bound channel" % message.content)
             return
+        
+        slef.safe_print('stage2')
         
         if not message_content.startswith(self.config.command_prefix):
             messageType = auto
