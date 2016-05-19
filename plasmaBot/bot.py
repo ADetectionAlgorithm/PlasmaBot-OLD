@@ -1873,25 +1873,37 @@ class PlasmaBot(discord.Client):
 
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
-            return
 
-        if message.author == self.user:
-            self.safe_print("Ignoring command from myself (%s)" % message.content)
-            return
+            if message.author = self.user:
+                self.safe_print("Ingoring autoreply from myself")
+                return
 
-        if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
-            return  # if I want to log this I just move it under the prefix check
+            if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
+                return
 
-        command, *args = message_content.split()  # Uh, doesn't this break prefixes with spaces in them (it doesn't, config parser already breaks them)
-        command = command[len(self.config.command_prefix):].lower().strip()
+            command = 'auto'
+            
+            *args = message_content.split()
+            handler = getattr(self, 'cmd_auto', None)
 
-        handler = getattr(self, 'cmd_%s' % command, None)
-        if not handler:
-            return
+        else:
+            if message.author == self.user:
+                self.safe_print("Ignoring command from myself (%s)" % message.content)
+                return
+
+            if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
+                return  # if I want to log this I just move it under the prefix check
+
+            command, *args = message_content.split()  # Uh, doesn't this break prefixes with spaces in them (it doesn't, config parser already breaks them)
+            command = command[len(self.config.command_prefix):].lower().strip()
+
+            handler = getattr(self, 'cmd_%s' % command, None)
+            if not handler:
+                return
 
         if message.channel.is_private:
             if not (message.author.id == self.config.owner_id and command == 'joinserver'):
-                await self.send_message(message.channel, 'You cannot use this bot in private messages.')
+                await self.send_message(message.channel, 'You cannot use PlasmaBot in a private message.')
                 return
 
         if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
