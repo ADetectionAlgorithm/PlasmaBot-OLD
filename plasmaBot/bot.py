@@ -754,6 +754,22 @@ class PlasmaBot(discord.Client):
 
     #OTHER COMMANDS
 
+    async def cmd_auto(self, message, leftover_args):
+        """
+        Usage:
+            Message
+            
+        @PlasmaBot will respond to your messages if they fit the profiles set.
+        """
+        
+        if leftover_args:
+            messageToSend = ""
+            for a in leftover_args:
+                messageToSend = messageToSend + a + " "
+            
+            return Response('%s' % messageToSend, reply=True, delete_after=120)
+
+
     async def cmd_say(self, message, leftover_args):
         """
         Usage:
@@ -1874,8 +1890,8 @@ class PlasmaBot(discord.Client):
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
 
-            if message.author = self.user:
-                self.safe_print("Ingoring autoreply from myself")
+            if message.author == self.user:
+                self.safe_print("Ignoring command from myself (%s)" % message.content)
                 return
 
             if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
