@@ -1542,7 +1542,7 @@ class PlasmaBot(discord.Client):
             else:
                 if new_volume == 0:
                     player.pause()
-                    player.volume = 1
+                    player.volume = 0.01
                 else:
                     raise exceptions.CommandError(
                         'Unreasonable volume provided: {}%. Provide a value between 1 and 100.'.format(new_volume), expire_in=20)
