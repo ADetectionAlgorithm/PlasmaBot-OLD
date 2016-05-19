@@ -770,7 +770,7 @@ class PlasmaBot(discord.Client):
             return Response('%s' % messageToSend, reply=True, delete_after=120)
 
     @owner_only
-    async def cmd_silentsay(self, message, leftover_args):
+    async def cmd_silentsay(self, message, channel, leftover_args):
         """
         Usage:
             >silentsay Message
@@ -784,10 +784,7 @@ class PlasmaBot(discord.Client):
             for a in leftover_args:
                 messageToSend = messageToSend + a + " "
         
-            message.channel,
-            '%s' % messageToSend,
-            also_delete=message
-            )
+            message.channel,'%s' % messageToSend,also_delete=message)
         
             return
 
