@@ -1903,8 +1903,9 @@ class PlasmaBot(discord.Client):
                 await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
                 return
 
-            if messageType = 'auto' and not (message.author.id == self.config.owner_id and command == 'watergame'):
+            if messageType = 'auto' and not message.author.id == self.config.owner_id:
                 await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
+                return
 
         if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
             self.safe_print("[User blacklisted] {0.id}/{0.name} ({1})".format(message.author, message_content))
