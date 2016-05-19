@@ -1540,7 +1540,7 @@ class PlasmaBot(discord.Client):
                     'Unreasonable volume change provided: {}{:+} -> {}%.  Provide a change between {} and {:+}.'.format(
                         old_volume, vol_change, old_volume + vol_change, 1 - old_volume, 100 - old_volume), expire_in=20)
             else:
-                if new_volume = 0:
+                if new_volume == 0:
                     player.pause()
                 else:
                     raise exceptions.CommandError(
