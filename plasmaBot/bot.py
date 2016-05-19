@@ -767,7 +767,8 @@ class PlasmaBot(discord.Client):
             for a in leftover_args:
                 messageToSend = messageToSend + a + " "
             
-            for arValue in (1, self.autoreplyCount)
+            arC = self.autoreplyCount
+            for arValue in (1, arC)
                 if messageToSend == self.autoN[arValue]
                     return Response('%s' % self.autoR[arValue], delete_after=120)
 
