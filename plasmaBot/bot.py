@@ -768,7 +768,7 @@ class PlasmaBot(discord.Client):
                 inputMsg = inputMsg + a + " "
             
             arC = self.autoreplyCount
-            for i in range( 1, arC ):
+            for i in range( 1, int(arC) ):
                 if inputMsg == self.autoN[i]:
                     return Response('%s' % self.autoR[i], delete_after=120)
 
