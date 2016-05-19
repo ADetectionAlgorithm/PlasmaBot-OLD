@@ -856,7 +856,7 @@ class PlasmaBot(discord.Client):
             return Response(
                 "Invite me (PlasmaBot) to your server with this Link: https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=0" % self.config.clientID,reply=True, delete_after=120)
         else:
-            return Response)
+            return Response(
                 "Sorry, I do not accept invites.  If you believe this to be an error, please contact the bot-admin", reply=True, delete_after=30)
 
     async def cmd_play(self, player, channel, author, permissions, leftover_args, song_url):
