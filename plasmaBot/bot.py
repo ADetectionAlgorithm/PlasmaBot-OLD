@@ -765,7 +765,7 @@ class PlasmaBot(discord.Client):
         if leftover_args:
             messageToSend = ""
             for a in leftover_args:
-                messageToSend = messageToSend.join(a," ")
+                messageToSend = messageToSend.join(a).join(" ")
             
             return Response('%s' % messageToSend, reply=True, delete_after=120)
 
