@@ -1305,7 +1305,10 @@ class PlasmaBot(discord.Client):
         voice_client = self.the_voice_clients.get(channel.server.id, None)
         if voice_client and voice_client.channel.server == author.voice_channel.server:
             await self.move_voice_client(author.voice_channel)
-            return Response("Joined %s" % voice_channel, delete_after=20)
+            return Response(
+                'Joined %s' % voice_channel,
+                delete_after=20
+            )
 
         # move to _verify_vc_perms?
         chperms = author.voice_channel.permissions_for(author.voice_channel.server.me)
