@@ -1871,9 +1871,13 @@ class PlasmaBot(discord.Client):
     async def on_message(self, message):
         await self.wait_until_ready()
         
+        self.safe_print('message recieved')
+        
         messageType = undetermined
         
         message_content = message.content.strip()
+        
+        self.safeprint('message content (%s)' % message_content)
         
         if message.author == self.user:
             self.safe_print("Ignoring message from myself (%s)" % message.content)
@@ -1883,7 +1887,7 @@ class PlasmaBot(discord.Client):
             self.safe_print("Message (%s) not sent in private / non-bound channel" % message.content)
             return
         
-        if message_content.startswith(self.config.command_prefix):
+        if not message_content.startswith(self.config.command_prefix):
             messageType = auto
             message_content = message_content.replace(" ", "_")
             command, *args = message_content.split()
