@@ -835,7 +835,7 @@ class PlasmaBot(discord.Client):
 
         if self.user.bot:
             return Response(
-                "I'm a bot!  I can't use an invite!  Lame? Add me here instead: https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=0" % self.config.clientID,reply=True, delete_after=30)
+                "I'm a bot!  I can't use an invite!  Lame? Add me here instead: https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=0" % self.config.clientID,reply=True, delete_after=120)
 
         try:
             await self.accept_invite(server_link)
@@ -843,6 +843,21 @@ class PlasmaBot(discord.Client):
 
         except:
             raise exceptions.CommandError('Invalid URL provided:\n{}\n'.format(server_link), expire_in=30)
+
+    async def cmd_invite(self, message, server_link):
+        """
+        Usage:
+            >invite
+    
+        Want to invite PlasmaBot to your Server?  Fire this command to get the invite Link.
+        """
+        
+        if self.config.clientID:
+            return Response(
+                "Invite me (PlasmaBot) to your server with this Link: https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=0" % self.config.clientID,reply=True, delete_after=120)
+        else:
+            return Response)
+                "Sorry, I do not accept invites.  If you believe this to be an error, please contact the bot-admin", reply=True, delete_after=30)
 
     async def cmd_play(self, player, channel, author, permissions, leftover_args, song_url):
         """
