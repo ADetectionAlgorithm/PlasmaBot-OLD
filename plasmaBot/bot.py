@@ -1847,6 +1847,7 @@ class PlasmaBot(discord.Client):
                 expire_in=600 if self.config.delete_messages else None,
                 also_delete=message if self.config.delete_invoking else None
             )
+        
         if autoparse = "lol":
             await self.safe_send_message(
                 message.channel,
@@ -1854,6 +1855,7 @@ class PlasmaBot(discord.Client):
                 expire_in=600 if self.config.delete_messages else None,
                 also_delete=message if self.config.delete_invoking else None
             )
+        
         #COMMANDS
         
         if message.author == self.user:
