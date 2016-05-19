@@ -1879,9 +1879,8 @@ class PlasmaBot(discord.Client):
         
         self.safe_print('t')
         
-        #if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
-        #    self.safe_print("Message (%s) not sent in private / non-bound channel" % message.content)
-        #    return
+        if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
+            return
         
         self.safe_print('stage2')
         
