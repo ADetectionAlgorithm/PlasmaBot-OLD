@@ -1902,7 +1902,7 @@ class PlasmaBot(discord.Client):
             if messageType == 'cmd' and not (message.author.id == self.config.owner_id and (command == 'joinserver' or command == 'invite')):
                 await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
                 return
-            else if messageType = 'auto' and not (message.author == self.config.owner_id and command == 'watergame'):
+            else if messageType = 'auto' and not (message.author.id == self.config.owner_id and command == 'joinserver'):
                 await self.send_message(message.channel, 'PlasmaBot does not respond in Private Messages.')
 
         if message.author.id in self.blacklist and message.author.id != self.config.owner_id:
