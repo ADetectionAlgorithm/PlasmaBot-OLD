@@ -1799,14 +1799,14 @@ class PlasmaBot(discord.Client):
     async def cmd_disconnect(self, server, message, channel):
         await self.safe_send_message(
             message.channel,
-            'Disconnecting from %s...' % server,
+            'Disconnecting from %s...' % message.server.me.voice_channel,
             expire_in=30,
             also_delete=message if self.config.delete_invoking else None
             )
         await self.disconnect_voice_client(server)
         await self._manual_delete_check(message)
 
-    async def cmd_restart(self):
+    async def cmd_restart(self, message):
         await self.safe_send_message(
             message.channel,
             'Restarting...',
@@ -1816,7 +1816,7 @@ class PlasmaBot(discord.Client):
         await self.disconnect_all_voice_clients()
         raise exceptions.RestartSignal
 
-    async def cmd_shutdown(self):
+    async def cmd_shutdown(self, message):
         await self.safe_send_message(
             message.channel,
             'Shutting Down...',
