@@ -754,7 +754,7 @@ class PlasmaBot(discord.Client):
 
     #OTHER COMMANDS
 
-    async def cmd_say(self, message)
+    async def cmd_say(self, message):
         """
         Usage:
             >say Message
