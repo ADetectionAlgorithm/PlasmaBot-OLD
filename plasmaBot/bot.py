@@ -1970,11 +1970,11 @@ class PlasmaBot(discord.Client):
                         handler_kwargs[key] = arg_value
                         params.pop(key)
 
-            if messageType == 'cmd'
-                messageTypeWritten = 'command':
+            if messageType == 'cmd':
+                messageTypeWritten = 'command'
 
-            else if messageType == 'auto'
-                messageTypeWritten = 'autoreply':
+            else if messageType == 'auto':
+                messageTypeWritten = 'autoreply'
 
             if message.author.id != self.config.owner_id:
                 if user_permissions.command_whitelist and command not in user_permissions.command_whitelist:
